@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: water
+
+  # H2 데이터베이스 설정 (로컬 테스트용)
+  datasource:
+    url: jdbc:h2:mem:waterdb;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # JSON 날짜 포맷 및 Null 처리
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+    time-zone: Asia/Seoul
+
+# 로깅 설정 (디버깅용)
+logging:
+  level:
+    root: info
+    com.example.water: debug
+    org.hibernate.SQL: debug
+
+# 사용자 정의 설정
+api:
+    [your valuable]:
+    key: ${GEMINI_API_KEY:your_default_key_here}
