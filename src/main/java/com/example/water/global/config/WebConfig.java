@@ -1,5 +1,5 @@
 package com.example.water.global.config;
-
+/* 에러 핸들러, 커스텀 Exception */
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
