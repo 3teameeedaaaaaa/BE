@@ -3,6 +3,8 @@ package com.example.water.domain.chat.entity;
 import com.example.water.domain.member.entity.Member;
 import com.example.water.domain.stock.entity.Stock;
 import com.example.water.global.common.BaseEntity;
+import com.example.water.global.common.SessionMode;
+import com.example.water.global.common.SessionStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,5 +27,11 @@ public class ChatSession extends BaseEntity {
     @JoinColumn(name = "stock_id")
     private Stock stock;
 
-    private String status; // PROCEEDING, COMPLETED
+    private String customStockName;
+
+    @Enumerated(EnumType.STRING)
+    private SessionMode sessionMode;
+
+    @Enumerated(EnumType.STRING)
+    private SessionStatus status = SessionStatus.ONGOING;
 }

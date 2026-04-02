@@ -2,6 +2,7 @@ package com.example.water.domain.analysis.entity;
 
 import com.example.water.domain.chat.entity.ChatSession;
 import com.example.water.global.common.BaseEntity;
+import com.example.water.global.common.UserDecision;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,8 @@ public class AnalysisResult extends BaseEntity {
     private CognitiveDistortion distortion;
 
     @Column(columnDefinition = "TEXT")
-    private String finalAdvice;
+    private String reflectionSummary;
 
-    private String userDecision; // BUY, SELL, HOLD
+    @Enumerated(EnumType.STRING)
+    private UserDecision userDecision; // WATCH, PROCEED, STOP
 }
