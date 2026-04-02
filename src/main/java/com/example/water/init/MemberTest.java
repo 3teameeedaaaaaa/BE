@@ -1,4 +1,4 @@
-package com.example.water.domain.member;
+package com.example.water.init;
 
 import com.example.water.domain.member.entity.Member;
 import com.example.water.domain.member.repository.MemberRepository;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class init implements CommandLineRunner {
+public class MemberTest implements CommandLineRunner {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
