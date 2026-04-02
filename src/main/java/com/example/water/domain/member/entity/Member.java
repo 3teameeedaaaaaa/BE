@@ -19,7 +19,7 @@ public class Member extends BaseEntity {
     private String loginId;
 
     @Column(nullable = false)
-    private String password;
+    private String hashedPassword;
 
     private String nickname;
 }
