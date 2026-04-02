@@ -20,7 +20,9 @@ public class ChatMessage extends BaseEntity {
     private ChatSession session;
 
     @Enumerated(EnumType.STRING)
-    private SenderType senderType; // USER, AI (Enum 생성 필요)
+    private SenderType senderType; // USER, AI
+
+    private String emotion; // 감정 받아오는 필드 (불안해요, 조급해요, 확신해요, 후회되요, 모르겠어요)
 
     @Column(columnDefinition = "TEXT")
     private String content;
