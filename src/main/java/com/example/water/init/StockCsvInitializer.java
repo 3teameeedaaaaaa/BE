@@ -28,7 +28,7 @@ public class StockCsvInitializer implements CommandLineRunner {
             return;
         }
 
-        ClassPathResource resource = new ClassPathResource("csv/dataa.csv");
+        ClassPathResource resource = new ClassPathResource("data/stocks_kr.csv");
 
         try (
                 Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);

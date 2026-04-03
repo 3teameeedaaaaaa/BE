@@ -32,7 +32,7 @@
 ---
 
 ## 📊 Database ERD
-![Database ERD](https://github.com/user-attachments/assets/95b6598c-fecd-4ba8-b8c4-f31df0450508)
+![Database ERD](https://github.com/user-attachments/assets/485414b8-e2ec-47ce-83e4-6e1c5f8feb6a)
 * *Reverse Engineering을 통해 도출된 객체 지향적 데이터 구조 (MySQL Workbench)*
 
 ---
