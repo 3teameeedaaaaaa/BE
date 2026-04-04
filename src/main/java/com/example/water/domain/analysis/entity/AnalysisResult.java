@@ -13,12 +13,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class AnalysisResult extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "session_id")
+    @JoinColumn(name = "session_id", nullable = false, unique = true)
     private ChatSession session;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,5 +30,11 @@ public class AnalysisResult extends BaseEntity {
     private String reflectionSummary;
 
     @Enumerated(EnumType.STRING)
-    private UserDecision userDecision; // WATCH, PROCEED, STOP
+    private UserDecision userDecision; // PRE일 때만 저장, POST는 null
+
+    private Integer togetherAgreePercent;
+    private Integer togetherOtherPercent;
+
+    @Column(columnDefinition = "TEXT")
+    private String togetherComment;
 }

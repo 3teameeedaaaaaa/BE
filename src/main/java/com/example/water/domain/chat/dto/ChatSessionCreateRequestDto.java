@@ -26,9 +26,6 @@ public class ChatSessionCreateRequestDto {
     @NotNull
     private String singleChip;
 
-    @NotNull
-    private String commonChip;
-
     @NotBlank
     private String content;
 }

@@ -31,8 +31,6 @@ public class ChatMessage extends BaseEntity {
 
     private String singleChip;
 
-    private String commonChip;
-
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 }

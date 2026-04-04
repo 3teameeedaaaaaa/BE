@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum SessionStatus {
     ONGOING(""),
     COMPLETED(""),
-    ABORTED("");
+    INTERRUPTED(""),;
 
     private final String text;
 }

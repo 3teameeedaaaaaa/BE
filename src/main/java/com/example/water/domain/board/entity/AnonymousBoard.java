@@ -21,7 +21,7 @@ public class AnonymousBoard extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "result_id")
     private AnalysisResult result; // 분석 결과 공유 시 연결하도록 설정함
 

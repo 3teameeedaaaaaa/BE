@@ -13,5 +13,4 @@ public class ChatSendMessageRequestDto {
 
     private String emotion;
     private String singleChip;
-    private String commonChip;
 }

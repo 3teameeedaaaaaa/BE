@@ -18,7 +18,6 @@ public class RedisChatMessageDto implements Serializable {
 
     private String emotion;
     private String singleChip;
-    private String commonChip;
 
     private String content;
     private LocalDateTime createdAt;

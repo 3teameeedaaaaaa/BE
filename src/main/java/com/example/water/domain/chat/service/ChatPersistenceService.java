@@ -36,7 +36,6 @@ public class ChatPersistenceService {
                         chatMessage.setSequence(dto.getSequence());
                         chatMessage.setEmotion(dto.getEmotion());
                         chatMessage.setSingleChip(dto.getSingleChip());
-                        chatMessage.setCommonChip(dto.getCommonChip());
                         chatMessage.setContent(dto.getContent());
                         return chatMessage;
                     })
@@ -65,7 +64,6 @@ public class ChatPersistenceService {
                         chatMessage.setSequence(dto.getSequence());
                         chatMessage.setEmotion(dto.getEmotion());
                         chatMessage.setSingleChip(dto.getSingleChip());
-                        chatMessage.setCommonChip(dto.getCommonChip());
                         chatMessage.setContent(dto.getContent());
                         return chatMessage;
                     })
@@ -74,7 +72,7 @@ public class ChatPersistenceService {
             chatMessageRepository.saveAll(chatMessages);
         }
 
-        chatSession.setStatus(SessionStatus.COMPLETED);
+        chatSession.setStatus(SessionStatus.INTERRUPTED);
         chatRedisService.clear(sessionId);
     }
 }

@@ -33,7 +33,6 @@ public class ChatService {
                 .senderType(SenderType.USER)
                 .emotion(request.getEmotion())
                 .singleChip(request.getSingleChip())
-                .commonChip(request.getCommonChip())
                 .content(request.getContent())
                 .createdAt(LocalDateTime.now())
                 .build();
