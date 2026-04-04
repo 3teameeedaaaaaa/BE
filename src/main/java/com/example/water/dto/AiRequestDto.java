@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-import javax.print.DocFlavor;
 import java.util.List;
 import java.util.ArrayList;
 
