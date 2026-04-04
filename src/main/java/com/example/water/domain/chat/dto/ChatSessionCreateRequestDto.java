@@ -5,15 +5,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 @Getter
 @Setter
 public class ChatSessionCreateRequestDto {
 
-    @NotNull
+    @Nullable
     private Long stockId;
 
-    @NotBlank
+    @Nullable
     private String customStockName;
 
     @NotNull
@@ -21,6 +22,12 @@ public class ChatSessionCreateRequestDto {
 
     @NotBlank
     private String emotion;
+
+    @NotNull
+    private String singleChip;
+
+    @NotNull
+    private String commonChip;
 
     @NotBlank
     private String content;

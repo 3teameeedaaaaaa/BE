@@ -11,21 +11,28 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ChatMessage extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "session_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "session_id", nullable = false)
     private ChatSession session;
 
     @Enumerated(EnumType.STRING)
-    private SenderType senderType; // USER, AI
+    @Column(nullable = false)
+    private SenderType senderType;
 
-    private String emotion; // 감정 받아오는 필드 (불안해요, 조급해요, 확신해요, 후회되요, 모르겠어요)
+    @Column(nullable = false)
+    private Integer sequence;
 
-    @Column(columnDefinition = "TEXT")
+    private String emotion;
+
+    private String singleChip;
+
+    private String commonChip;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
-
-    private boolean isSkipped = false; // Q4 건너뛰기 여부
 }

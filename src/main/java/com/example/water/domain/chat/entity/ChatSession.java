@@ -15,12 +15,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ChatSession extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,8 +31,10 @@ public class ChatSession extends BaseEntity {
     private String customStockName;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SessionMode sessionMode;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SessionStatus status = SessionStatus.ONGOING;
 }
