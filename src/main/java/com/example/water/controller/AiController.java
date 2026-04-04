@@ -14,7 +14,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*") // 프론트엔드 연동(CORS) 허용
 public class AiController {
 
     private final AiCommunicationService aiService;
