@@ -15,7 +15,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Component
+@Component
 @RequiredArgsConstructor
 public class StockCsvInitializer implements CommandLineRunner {
 
@@ -38,6 +38,8 @@ public class StockCsvInitializer implements CommandLineRunner {
                         .build()
                         .parse(reader)
         ) {
+            System.out.println("CSV headers = " + parser.getHeaderMap().keySet());
+
             List<Stock> stocks = new ArrayList<>();
 
             for (CSVRecord record : parser) {

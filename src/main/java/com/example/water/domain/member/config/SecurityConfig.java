@@ -24,7 +24,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/members/login", "/api/members/logout", "/api/members/me"
+                        .requestMatchers("/api/members/login", "/api/members/logout", "/api/members/me",
+                                "/api/members/signup"
                         ,"/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().permitAll()
                 );
