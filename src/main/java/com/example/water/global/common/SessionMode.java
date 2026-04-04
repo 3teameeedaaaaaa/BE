@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum SessionMode {
+public enum SessionMode{
     PRE("",""),
     POST("","");
 

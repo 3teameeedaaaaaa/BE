@@ -17,7 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -40,35 +43,38 @@ public class AnalysisService {
 
         List<ChatMessage> messages = chatMessageRepository.findBySessionIdOrderBySequenceAsc(sessionId);
 
-        String stockName = session.getStock() != null
-                ? session.getStock().getName()
-                : session.getCustomStockName();
+        Map<String, Object> aiParams = new HashMap<>();
+        aiParams.put("mode", session.getSessionMode().toString().toLowerCase());
+        aiParams.put("ticker", session.getStock() != null ? session.getStock().getName() : session.getCustomStockName());
+        aiParams.put("emotion", "");
+        aiParams.put("text", messages.isEmpty() ? "" : messages.get(messages.size() - 1).getContent());
+        aiParams.put("turn_number", 2);
 
-        AnalysisAiRequestDto aiRequest = AnalysisAiRequestDto.builder()
-                .sessionId(session.getId())
-                .sessionMode(session.getSessionMode())
-                .stockName(stockName)
-                .messages(messages.stream()
-                        .map(m -> AnalysisMessageDto.builder()
-                                .sequence(m.getSequence())
-                                .senderType(m.getSenderType())
-                                .content(m.getContent())
-                                .build())
-                        .toList())
-                .build();
+        List<Map<String, String>> history = messages.stream()
+                .map(m -> {
+                    Map<String, String> msg = new HashMap<>();
+                    msg.put("role", m.getSenderType().toString().equals("USER") ? "user" : "assistant");
+                    msg.put("content", m.getContent());
+                    return msg;
+                }).toList();
+        aiParams.put("conversation_history", history);
 
-        AnalysisAiResponseDto aiResponse = analysisAiService.analyze(aiRequest);
+        AnalysisAiResponseDto aiResponse = analysisAiService.getAiAnalysis(aiParams);
 
-        CognitiveDistortion distortion = cognitiveDistortionRepository.findByTag(aiResponse.getDistortionTag())
-                .orElseThrow(() -> new IllegalArgumentException("인지왜곡 마스터 데이터가 없습니다. tag=" + aiResponse.getDistortionTag()));
+        // [수정 포인트 1] getDistortionTag() -> getDistortion_tag() (DTO 필드명과 일치)
+        CognitiveDistortion distortion = cognitiveDistortionRepository.findByTag(aiResponse.getDistortion_tag())
+                .orElseThrow(() -> new IllegalArgumentException("인지왜곡 마스터 데이터가 없습니다. tag=" + aiResponse.getDistortion_tag()));
 
         AnalysisResult result = new AnalysisResult();
         result.setSession(session);
         result.setDistortion(distortion);
-        result.setReflectionSummary(aiResponse.getReflectionSummary());
-        result.setTogetherAgreePercent(aiResponse.getTogetherAgreePercent());
-        result.setTogetherOtherPercent(aiResponse.getTogetherOtherPercent());
-        result.setTogetherComment(aiResponse.getTogetherComment());
+
+        // [수정 포인트 2] getReflectionSummary() -> getReflection_summary()
+        result.setReflectionSummary(aiResponse.getReflection_summary());
+
+        // [수정 포인트 3] DTO에 없는 퍼센트 필드 제거 및 코멘트 기본값 처리
+        // aiResponse에 together_comment가 있다면 getTogether_comment()로 호출
+        result.setTogetherComment("분석이 완료되었습니다.");
 
         analysisResultRepository.save(result);
 
@@ -105,8 +111,6 @@ public class AnalysisService {
                 .distortionTag(result.getDistortion().getTag())
                 .distortionTypeName(result.getDistortion().getTypeName())
                 .reflectionSummary(result.getReflectionSummary())
-                .togetherAgreePercent(result.getTogetherAgreePercent())
-                .togetherOtherPercent(result.getTogetherOtherPercent())
                 .togetherComment(result.getTogetherComment())
                 .decisionRequired(sessionMode == SessionMode.PRE)
                 .userDecision(result.getUserDecision())

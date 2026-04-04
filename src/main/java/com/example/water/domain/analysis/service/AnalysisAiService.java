@@ -1,30 +1,68 @@
 package com.example.water.domain.analysis.service;
 
-import com.example.water.domain.analysis.dto.AnalysisAiRequestDto;
 import com.example.water.domain.analysis.dto.AnalysisAiResponseDto;
-import com.example.water.global.common.SessionMode;
+import com.example.water.domain.analysis.dto.AnalysisAiResponseDto; // [추가] 응답 DTO 임포트
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.net.HttpURLConnection;
+import java.io.IOException;
+import java.util.Map;
 
 @Service
 public class AnalysisAiService {
 
-    public AnalysisAiResponseDto analyze(AnalysisAiRequestDto request) {
-        if (request.getSessionMode() == SessionMode.PRE) {
-            return AnalysisAiResponseDto.builder()
-                    .distortionTag("CATASTROPHIZING")
-                    .reflectionSummary("하락 자체보다 더 큰 손실이 올 것 같다는 상상이 판단을 먼저 끌고 가는 모습이 보였어요.")
-                    .togetherAgreePercent(75)
-                    .togetherOtherPercent(25)
-                    .togetherComment("손절하고 나서 다음 날 반등한 적이 있어서, 원칙부터 다시 확인했어요.")
-                    .build();
-        }
+    @Value("${ai.server.url}")
+    private String aiServerUrl;
 
-        return AnalysisAiResponseDto.builder()
-                .distortionTag("URGENCY")
-                .reflectionSummary("급등 흐름을 놓치고 싶지 않은 조급함이 근거보다 먼저 앞섰던 것으로 보여요.")
-                .togetherAgreePercent(89)
-                .togetherOtherPercent(21)
-                .togetherComment("급등장에서 산 건 거의 다 비슷한 이유였고, 기록해두니 패턴이 보였어요.")
-                .build();
+    // [변경] 리턴 타입을 String에서 AiResponseDto로 변경
+    public AnalysisAiResponseDto getAiAnalysis(Map<String, Object> requestParams) {
+
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory() {
+            @Override
+            protected void prepareConnection(HttpURLConnection connection, String httpMethod) throws IOException {
+                super.prepareConnection(connection, httpMethod);
+                connection.setInstanceFollowRedirects(false);
+            }
+        };
+
+        factory.setConnectTimeout(5000);
+        factory.setReadTimeout(30000);
+        RestTemplate restTemplate = new RestTemplate(factory);
+
+        // 주소 조립
+        String baseUrl = aiServerUrl.trim();
+        if (baseUrl.endsWith("/")) {
+            baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+        }
+        String url = baseUrl + "/api/chat";
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("ngrok-skip-browser-warning", "true");
+
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestParams, headers);
+
+            System.out.println(">>> [최종 발사] URL: " + url);
+
+            // [변경] String.class 대신 AiResponseDto.class를 사용하여 자동으로 객체 변환
+            ResponseEntity<AnalysisAiResponseDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entity,
+                    AnalysisAiResponseDto.class
+            );
+
+            return response.getBody();
+
+        } catch (Exception e) {
+            System.err.println("!!! [통신 에러]: " + e.getMessage());
+            // 에러 발생 시 빈 객체를 반환하여 컨트롤러가 터지지 않게 방어
+            return new AnalysisAiResponseDto();
+        }
     }
 }

@@ -16,9 +16,6 @@ public class AnalysisResultResponseDto {
     private String distortionTag;
     private String distortionTypeName;
     private String reflectionSummary;
-
-    private Integer togetherAgreePercent;
-    private Integer togetherOtherPercent;
     private String togetherComment;
 
     private boolean decisionRequired; // PRE면 true, POST면 false
