@@ -20,7 +20,7 @@ public class MemberTest implements CommandLineRunner {
             Member member = new Member();
             member.setLoginId("test");
             member.setHashedPassword(passwordEncoder.encode("1234"));
-            member.setNickname("상ㅗ");
+            member.setNickname("상gus");
 
             memberRepository.save(member);
         }

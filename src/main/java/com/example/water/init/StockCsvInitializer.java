@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class StockCsvInitializer implements CommandLineRunner {
         ClassPathResource resource = new ClassPathResource("data/stocks_kr.csv");
 
         try (
-                Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
+                Reader reader = new InputStreamReader(resource.getInputStream(), "MS949");
                 CSVParser parser = CSVFormat.DEFAULT
                         .builder()
                         .setHeader()
@@ -42,9 +41,9 @@ public class StockCsvInitializer implements CommandLineRunner {
             List<Stock> stocks = new ArrayList<>();
 
             for (CSVRecord record : parser) {
-                String tickerCode = record.get("Issue code").trim();
-                String name = record.get("Issue name").trim();
-                String marketType = record.get("Market type").trim();
+                String tickerCode = record.get("단축코드").trim();
+                String name = record.get("한글 종목명").trim();
+                String marketType = record.get("시장구분").trim();
 
                 if (tickerCode.isEmpty() || name.isEmpty()) {
                     continue;
@@ -58,6 +57,7 @@ public class StockCsvInitializer implements CommandLineRunner {
             }
 
             stockRepository.saveAll(stocks);
+            System.out.println("주식 CSV 적재 완료: " + stocks.size() + "건");
         }
     }
 }
