@@ -21,7 +21,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 // 2. CORS 비활성화 (프론트 통신 허용)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(org.springframework.security.config.Customizer.withDefaults())
 
                 // 3. 기본 로그인 폼 및 HTTP Basic 인증 끄기
                 .formLogin(AbstractHttpConfigurer::disable)
